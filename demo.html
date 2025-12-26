@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      body {
+  font-family: Arial, sans-serif;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.datepicker {
+  width: 320px;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* ===== TOP HEADER ===== */
+.header {
+  background: #0b5ed7;
+  color: white;
+  padding: 12px;
+}
+
+.header .year {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.header .date {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ===== MONTH NAV ===== */
+.month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: #0b5ed7;
+  font-weight: bold;
+}
+
+.month-nav button {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #0b5ed7;
+}
+
+/* ===== DAYS ===== */
+.weekdays, .days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.weekdays {
+  font-size: 13px;
+  color: #666;
+}
+
+.days span {
+  padding: 10px 0;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.days span:hover {
+  background: #e7f1ff;
+}
+
+.days span.active {
+  background: #0b5ed7;
+  color: white;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  gap: 15px;
+}
+
+.footer button {
+  border: none;
+  background: none;
+  color: #0b5ed7;
+  font-weight: bold;
+  cursor: pointer;
+}
+     </style>
+
+</head>
+<body>
+
+  <div class="datepicker">
+
+  <!-- TOP HEADER -->
+  <div class="header">
+    <div class="year" id="year">2025</div>
+    <div class="date" id="selectedDate">Fri, 20 June</div>
+  </div>
+
+  <!-- MONTH NAV -->
+  <div class="month-nav">
+    <button id="prev">&#10094;</button>
+    <div id="monthName">June</div>
+    <button id="next">&#10095;</button>
+  </div>
+
+  <!-- WEEKDAYS -->
+  <div class="weekdays">
+    <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+  </div>
+
+  <!-- DAYS -->
+  <div class="days" id="days"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <button id="cancel">Cancel</button>
+    <button id="ok">OK</button>
+  </div>
+
+</div>
+
+<script>
+  
+  const months = [
+  { name: "June", days: 30 },
+  { name: "July", days: 31 }
+];
+
+let currentMonth = 0;
+let selectedDay = 20;
+
+const daysDiv = document.getElementById("days");
+const monthName = document.getElementById("monthName");
+const selectedDate = document.getElementById("selectedDate");
+
+function renderCalendar() {
+  daysDiv.innerHTML = "";
+  monthName.innerText = months[currentMonth].name;
+
+  for (let i = 1; i <= months[currentMonth].days; i++) {
+    const span = document.createElement("span");
+    span.innerText = i;
+
+    if (i === selectedDay) span.classList.add("active");
+
+    span.onclick = () => {
+      document.querySelectorAll(".active").forEach(d => d.classList.remove("active"));
+      span.classList.add("active");
+      selectedDay = i;
+      selectedDate.innerText = `Fri, ${i} ${months[currentMonth].name}`;
+    };
+
+    daysDiv.appendChild(span);
+  }
+}
+
+document.getElementById("next").onclick = () => {
+  if (currentMonth < 1) {
+    currentMonth++;
+    renderCalendar();
+  }
+};
+
+document.getElementById("prev").onclick = () => {
+  if (currentMonth > 0) {
+    currentMonth--;
+    renderCalendar();
+  }
+};
+
+document.getElementById("cancel").onclick = () => {
+  alert("Cancelled");
+};
+
+document.getElementById("ok").onclick = () => {
+  alert(`Selected: ${selectedDay} ${months[currentMonth].name} 2025`);
+};
+
+renderCalendar();
+</script>
+</body>
+</html>
